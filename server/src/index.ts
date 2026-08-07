@@ -1,19 +1,31 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import { prisma } from "./lib/prisma";
+import { responseFormatter } from "./middleware/response";
+import { errorHandler } from "./middleware/errorHandler";
+import authRoutes from "./routes/auth.routes";
 
 const app = express();
-app.use(express.json());
 
-// Day 1 goal: confirm the server boots and can reach the database.
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(responseFormatter);
+
 app.get("/health", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
-    res.json({ success: true, message: "Server up, database reachable" });
+    res.success({ status: "ok" }, "Server up, database reachable");
   } catch (err) {
-    res.status(500).json({ success: false, message: "Database not reachable", error: String(err) });
+    res.fail(`Database not reachable: ${String(err)}`, 500);
   }
 });
+
+app.use("/api/auth", authRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
