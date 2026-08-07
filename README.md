@@ -22,3 +22,9 @@ shared/   TypeScript types shared by both
 
 ## Progress log
 - **Day 1** — Monorepo (client/server/shared) scaffolded, shared TypeScript types defined, env config templates added, Prisma schema written, database connectivity verified via `/health`.
+- **Day 2** — Ran the initial migration against Postgres (Users, Projects, BlogPosts, Skills, UserSkills, Endorsements, Connections, Notifications), added a seed script with sample data, documented the schema as an ERD in `docs/database-schema.md`.
+
+## Schema
+See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
+
+To seed sample data after migrating: `npm run prisma:seed --workspace=server`
