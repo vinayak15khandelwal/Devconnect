@@ -1,10 +1,21 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-brand-700">DevConnect</h1>
-        <p className="text-gray-500">Day 1 setup complete — client, server & shared workspace wired up.</p>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   );
 }
