@@ -26,6 +26,7 @@ shared/   TypeScript types shared by both
 - **Day 3** — Backend auth: email/password registration + login issuing JWTs (httpOnly cookie + bearer fallback), `/api/auth/me`, and full GitHub OAuth (authorize → callback → token exchange → user upsert). Consistent `{success, data, message}` response shape added via middleware.
 - **Day 4** — Profile CRUD (view by username with skills + endorsement counts, update bio/location/skills, avatar upload), project CRUD (create/update/delete with tech stack + optional image), both wired to Cloudinary for 2MB-capped image uploads.
 - **Day 5** — Frontend auth: Login/Register pages, `AuthContext` (register/login/logout/GitHub OAuth redirect, hydrates from `/api/auth/me`, connects the notification socket), `ProtectedRoute` guarding `/dashboard`, React Query + React Router wired into `main.tsx`.
+- **Day 6** — Profile page (`/u/:username`, public): hero section with avatar upload, skills grid with endorsement counts, projects showcase, in-place edit mode for bio/location/GitHub/skills (owner-only), and a lightweight add-project form.
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
