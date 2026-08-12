@@ -25,6 +25,7 @@ export default function Profile() {
   const queryClient = useQueryClient();
   const [editing, setEditing] = useState(false);
   const [addingProject, setAddingProject] = useState(false);
+  const [mutationError, setMutationError] = useState<string | null>(null);
 
   const isOwnProfile = currentUser?.username === username;
 
@@ -38,18 +39,28 @@ export default function Profile() {
     mutationFn: (payload: { bio?: string; location?: string; githubUrl?: string; skills?: string[] }) =>
       api.patch("/api/profile", payload),
     onSuccess: () => {
+      setMutationError(null);
       queryClient.invalidateQueries({ queryKey: ["profile", username] });
       setEditing(false);
     },
+    onError: (err: any) => setMutationError(err?.response?.data?.message || "Couldn't save profile changes."),
   });
 
   const uploadAvatar = useMutation({
     mutationFn: (file: File) => {
       const form = new FormData();
       form.append("avatar", file);
-      return api.post("/api/profile/avatar", form, { headers: { "Content-Type": "multipart/form-data" } });
+      // IMPORTANT: do not set a Content-Type header here. The browser must
+      // generate it itself (multipart/form-data; boundary=...) — forcing
+      // "multipart/form-data" with no boundary produces a request the
+      // server's multipart parser can't read, and the request fails.
+      return api.post("/api/profile/avatar", form);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["profile", username] }),
+    onSuccess: () => {
+      setMutationError(null);
+      queryClient.invalidateQueries({ queryKey: ["profile", username] });
+    },
+    onError: (err: any) => setMutationError(err?.response?.data?.message || "Avatar upload failed."),
   });
 
   const addProject = useMutation({
@@ -58,12 +69,15 @@ export default function Profile() {
       form.append("title", payload.title);
       form.append("description", payload.description);
       form.append("techStack", JSON.stringify(payload.techStack));
-      return api.post("/api/projects", form, { headers: { "Content-Type": "multipart/form-data" } });
+      // Same fix as avatar upload: let the browser set Content-Type + boundary.
+      return api.post("/api/projects", form);
     },
     onSuccess: () => {
+      setMutationError(null);
       queryClient.invalidateQueries({ queryKey: ["profile", username] });
       setAddingProject(false);
     },
+    onError: (err: any) => setMutationError(err?.response?.data?.message || "Couldn't create the project."),
   });
 
   if (isLoading) return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>;
@@ -73,6 +87,12 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
       <div className="max-w-3xl mx-auto space-y-8">
+        {mutationError && (
+          <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-md px-3 py-2">
+            {mutationError}
+          </div>
+        )}
+
         {/* Hero */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-start gap-5">
           <div className="relative">
@@ -151,7 +171,7 @@ export default function Profile() {
           </div>
 
           {addingProject && (
-            <AddProjectForm submitting={addProject.isPending} onSubmit={(payload) => addProject.mutate(payload)} />
+            <AddProjectForm submitting={addProject.isPending} onSubmit={addProject.mutateAsync} />
           )}
 
           {profile.projects.length === 0 ? (
@@ -225,16 +245,26 @@ function AddProjectForm({
   submitting, onSubmit,
 }: {
   submitting: boolean;
-  onSubmit: (payload: { title: string; description: string; techStack: string[] }) => void;
+  // Returns a Promise (mutateAsync) so the form can wait for the real
+  // outcome instead of assuming success the moment it's called.
+  onSubmit: (payload: { title: string; description: string; techStack: string[] }) => Promise<unknown>;
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [techStack, setTechStack] = useState("");
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    onSubmit({ title, description, techStack: techStack.split(",").map((t) => t.trim()).filter(Boolean) });
-    setTitle(""); setDescription(""); setTechStack("");
+    try {
+      await onSubmit({ title, description, techStack: techStack.split(",").map((t) => t.trim()).filter(Boolean) });
+      // Only clear the form once the project is confirmed persisted —
+      // clearing unconditionally here was what made a failed submission
+      // look successful.
+      setTitle(""); setDescription(""); setTechStack("");
+    } catch {
+      // Error is already surfaced via the mutation's onError -> mutationError banner.
+      // Keep the user's input in place so they don't have to retype it.
+    }
   }
 
   return (
