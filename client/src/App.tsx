@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import BlogEditor from "./pages/BlogEditor";
+import Search from "./pages/Search";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -20,6 +21,9 @@ export default function App() {
       {/* Public — blog list and posts are readable by anyone */}
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
+
+      {/* Public — developer discovery */}
+      <Route path="/search" element={<Search />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />

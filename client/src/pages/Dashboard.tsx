@@ -12,6 +12,9 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-xl font-bold text-brand-700">DevConnect</h1>
           <div className="flex items-center gap-4 text-sm">
+            <Link to="/search" className="text-brand-600 hover:underline">
+              Find devs
+            </Link>
             <Link to="/blog" className="text-brand-600 hover:underline">
               Blog
             </Link>

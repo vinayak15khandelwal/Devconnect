@@ -29,6 +29,7 @@ shared/   TypeScript types shared by both
 - **Day 6** — Profile page (`/u/:username`, public): hero section with avatar upload, skills grid with endorsement counts, projects showcase, in-place edit mode for bio/location/GitHub/skills (owner-only), and a lightweight add-project form.
 - **Fix (post-Day 6)** — project creation and avatar upload weren't persisting: both mutations forced a boundary-less `Content-Type: multipart/form-data` header, which broke multipart parsing server-side. Fixed by letting the browser set the header, plus added error handling so a failed submit no longer looks successful.
 - **Day 7** — Blog system: list view (`/blog`), single post view with Markdown rendering (`/blog/:slug`), and a create/edit page (`/blog/new`, `/blog/:slug/edit`) with a live Markdown preview toggle. Backend blog routes wired in; owner-only edit/delete.
+- **Day 8** — Developer search & discovery (`/search`): filter by skill and/or location, paginated results as developer cards linking to their profile.
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.

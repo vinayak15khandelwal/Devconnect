@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.routes";
 import profileRoutes from "./routes/profile.routes";
 import projectRoutes from "./routes/project.routes";
 import blogRoutes from "./routes/blog.routes";
+import searchRoutes from "./routes/search.routes";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);
+app.use("/api/search", searchRoutes);
 
 app.use(errorHandler);
 
