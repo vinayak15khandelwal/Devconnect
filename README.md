@@ -35,3 +35,15 @@ shared/   TypeScript types shared by both
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
 
 To seed sample data after migrating: `npm run prisma:seed --workspace=server`
+
+## Day 9 — Connection System
+
+Planned connection and networking functionality:
+- Send connection requests
+- Accept or reject requests
+- Cancel pending requests
+- View connections
+- View pending requests
+- Display connection status on developer profiles
+- Mutual connections
+
