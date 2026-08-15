@@ -7,6 +7,7 @@ import BlogList from "./pages/BlogList";
 import BlogPost from "./pages/BlogPost";
 import BlogEditor from "./pages/BlogEditor";
 import Search from "./pages/Search";
+import Connections from "./pages/Connections";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/connections" element={<Connections />} />
         <Route path="/blog/new" element={<BlogEditor />} />
         <Route path="/blog/:slug/edit" element={<BlogEditor />} />
       </Route>

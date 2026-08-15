@@ -30,6 +30,7 @@ shared/   TypeScript types shared by both
 - **Fix (post-Day 6)** — project creation and avatar upload weren't persisting: both mutations forced a boundary-less `Content-Type: multipart/form-data` header, which broke multipart parsing server-side. Fixed by letting the browser set the header, plus added error handling so a failed submit no longer looks successful.
 - **Day 7** — Blog system: list view (`/blog`), single post view with Markdown rendering (`/blog/:slug`), and a create/edit page (`/blog/new`, `/blog/:slug/edit`) with a live Markdown preview toggle. Backend blog routes wired in; owner-only edit/delete.
 - **Day 8** — Developer search & discovery (`/search`): filter by skill and/or location, paginated results as developer cards linking to their profile.
+- **Day 9** — Connection system: send/accept/reject requests, `/connections` page (pending + accepted lists), a `ConnectButton` on profiles that reflects live status (none/pending sent/pending received/connected), and a mutual-connections indicator on other users' profiles.
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
@@ -38,12 +39,10 @@ To seed sample data after migrating: `npm run prisma:seed --workspace=server`
 
 ## Day 9 � Connection System
 
-Planned connection and networking functionality:
 - Send connection requests
-- Accept or reject requests
+- Accept or reject connection requests
 - Cancel pending requests
-- View connections
-- View pending requests
-- Display connection status on developer profiles
+- Connections list
+- Pending incoming/outgoing requests
+- Connection status on developer profiles
 - Mutual connections
-

@@ -5,6 +5,8 @@ import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import SkillsGrid from "../components/SkillsGrid";
 import ProjectCard from "../components/ProjectCard";
+import ConnectButton from "../components/ConnectButton";
+import MutualConnections from "../components/MutualConnections";
 import type { Project } from "@shared/index";
 
 interface DeveloperProfile {
@@ -118,13 +120,15 @@ export default function Profile() {
                 <h1 className="text-xl font-bold text-gray-900">{profile.name}</h1>
                 <p className="text-sm text-gray-400">@{profile.username}</p>
               </div>
-              {isOwnProfile && (
+              {isOwnProfile ? (
                 <button
                   onClick={() => setEditing((v) => !v)}
                   className="text-sm border border-gray-300 rounded-md px-3 py-1.5 hover:bg-gray-50"
                 >
                   {editing ? "Cancel" : "Edit profile"}
                 </button>
+              ) : (
+                <ConnectButton username={profile.username} />
               )}
             </div>
 
@@ -139,6 +143,7 @@ export default function Profile() {
                     </a>
                   )}
                 </div>
+                {!isOwnProfile && <MutualConnections username={profile.username} />}
               </>
             ) : (
               <EditForm

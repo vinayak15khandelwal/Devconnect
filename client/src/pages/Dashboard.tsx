@@ -15,6 +15,9 @@ export default function Dashboard() {
             <Link to="/search" className="text-brand-600 hover:underline">
               Find devs
             </Link>
+            <Link to="/connections" className="text-brand-600 hover:underline">
+              Connections
+            </Link>
             <Link to="/blog" className="text-brand-600 hover:underline">
               Blog
             </Link>

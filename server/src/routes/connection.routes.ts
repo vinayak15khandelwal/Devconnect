@@ -24,6 +24,57 @@ router.get("/pending", requireAuth, async (req: AuthedRequest, res) => {
   res.success(pending);
 });
 
+// Tells the frontend what button state to show on a profile: whether
+// there's no relationship yet, a request pending in either direction,
+// or an accepted connection. Avoids the client having to reconcile
+// multiple list endpoints itself.
+router.get("/status/:username", requireAuth, async (req: AuthedRequest, res) => {
+  const target = await prisma.user.findUnique({ where: { username: req.params.username } });
+  if (!target) return res.fail("Developer not found", 404);
+  if (target.id === req.userId) return res.success({ status: "SELF" });
+
+  const connection = await prisma.connection.findFirst({
+    where: {
+      OR: [
+        { requesterId: req.userId, addresseeId: target.id },
+        { requesterId: target.id, addresseeId: req.userId },
+      ],
+    },
+  });
+
+  if (!connection || connection.status === "REJECTED") return res.success({ status: "NONE" });
+  if (connection.status === "ACCEPTED") return res.success({ status: "ACCEPTED", connectionId: connection.id });
+
+  const status = connection.requesterId === req.userId ? "PENDING_SENT" : "PENDING_RECEIVED";
+  res.success({ status, connectionId: connection.id });
+});
+
+// Developers connected to both the current user and :username — shown on
+// a profile as "N mutual connections" the way most networking sites do.
+router.get("/mutual/:username", requireAuth, async (req: AuthedRequest, res) => {
+  const target = await prisma.user.findUnique({ where: { username: req.params.username } });
+  if (!target) return res.fail("Developer not found", 404);
+
+  const [mine, theirs] = await Promise.all([
+    prisma.connection.findMany({
+      where: { status: "ACCEPTED", OR: [{ requesterId: req.userId }, { addresseeId: req.userId }] },
+    }),
+    prisma.connection.findMany({
+      where: { status: "ACCEPTED", OR: [{ requesterId: target.id }, { addresseeId: target.id }] },
+    }),
+  ]);
+
+  const myIds = new Set(mine.map((c: { requesterId: string; addresseeId: string }) => (c.requesterId === req.userId ? c.addresseeId : c.requesterId)));
+  const theirIds = new Set(theirs.map((c: { requesterId: string; addresseeId: string }) => (c.requesterId === target.id ? c.addresseeId : c.requesterId)));
+  const mutualIds = [...myIds].filter((id) => theirIds.has(id));
+
+  const mutualUsers = await prisma.user.findMany({
+    where: { id: { in: mutualIds } },
+    select: { id: true, name: true, username: true, avatarUrl: true },
+  });
+  res.success(mutualUsers);
+});
+
 router.post("/request/:username", requireAuth, async (req: AuthedRequest, res) => {
   const target = await prisma.user.findUnique({ where: { username: req.params.username } });
   if (!target) return res.fail("Developer not found", 404);
