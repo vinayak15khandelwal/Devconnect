@@ -18,7 +18,7 @@ export default function MutualConnections({ username }: { username: string }) {
   if (!data || data.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-2 mt-3 text-sm text-gray-400">
+    <div className="flex items-center gap-2 mt-3 text-sm text-gray-400 dark:text-gray-500">
       <div className="flex -space-x-2">
         {data.slice(0, 3).map((u) => (
           <img
@@ -26,7 +26,7 @@ export default function MutualConnections({ username }: { username: string }) {
             src={u.avatarUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${u.name}`}
             alt={u.name}
             title={u.name}
-            className="w-6 h-6 rounded-full object-cover bg-gray-100 border-2 border-white"
+            className="w-6 h-6 rounded-full object-cover bg-gray-100 dark:bg-gray-700 border-2 border-white"
           />
         ))}
       </div>
@@ -35,7 +35,7 @@ export default function MutualConnections({ username }: { username: string }) {
         {data[0] && (
           <>
             {" "}— including{" "}
-            <Link to={`/u/${data[0].username}`} className="text-brand-600 hover:underline">
+            <Link to={`/u/${data[0].username}`} className="text-brand-600 dark:text-brand-400 hover:underline">
               {data[0].name}
             </Link>
           </>

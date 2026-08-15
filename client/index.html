@@ -4,8 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevConnect</title>
+    <script>
+      // Applied before React mounts so there's no flash of the wrong theme.
+      // Mirrors the logic in ThemeContext.tsx — keep both in sync if changed.
+      (function () {
+        var saved = localStorage.getItem("devconnect_theme");
+        var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        if (theme === "dark") document.documentElement.classList.add("dark");
+      })();
+    </script>
   </head>
-  <body class="bg-gray-50">
+  <body class="bg-gray-50 dark:bg-gray-900 transition-colors">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -2,14 +2,14 @@ import { Router } from "express";
 import multer from "multer";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
-import { requireAuth, AuthedRequest } from "../middleware/auth";
+import { requireAuth, attachUserIfPresent, AuthedRequest } from "../middleware/auth";
 import { uploadImageBuffer } from "../lib/cloudinary";
 import { toPublicUser } from "./auth.routes";
 
 const router = Router();
 const upload = multer({ limits: { fileSize: 2 * 1024 * 1024 } }); // 2MB max per brief
 
-router.get("/:username", async (req, res) => {
+router.get("/:username", attachUserIfPresent, async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({
     where: { username: req.params.username },
     include: {
@@ -21,11 +21,15 @@ router.get("/:username", async (req, res) => {
 
   res.success({
     ...toPublicUser(user),
-    skills: user.userSkills.map((us: { skill: { id: string; name: string }; endorsements: unknown[] }) => ({
-      id: us.skill.id,
-      name: us.skill.name,
-      endorsementCount: us.endorsements.length,
-    })),
+    skills: user.userSkills
+      .map((us: { skill: { id: string; name: string }; endorsements: { endorserId: string }[] }) => ({
+        id: us.skill.id,
+        name: us.skill.name,
+        endorsementCount: us.endorsements.length,
+        endorsedByMe: req.userId ? us.endorsements.some((e) => e.endorserId === req.userId) : false,
+      }))
+      // Most-endorsed first, so a profile's strongest/most-vouched-for skills lead the grid.
+      .sort((a: { endorsementCount: number }, b: { endorsementCount: number }) => b.endorsementCount - a.endorsementCount),
     projects: user.projects,
   });
 });

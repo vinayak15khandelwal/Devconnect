@@ -26,3 +26,11 @@
 .markdown-body blockquote {
   border-left: 3px solid #e5e7eb; padding-left: 1em; color: #6b7280; margin-bottom: 1em;
 }
+
+/* Dark-mode overrides — plain CSS since this block isn't Tailwind utilities */
+.dark .markdown-body h1, .dark .markdown-body h2, .dark .markdown-body h3 { color: #f3f4f6; }
+.dark .markdown-body p { color: #d1d5db; }
+.dark .markdown-body code { background: #374151; color: #f3f4f6; }
+.dark .markdown-body pre { background: #030712; }
+.dark .markdown-body a { color: #818cf8; }
+.dark .markdown-body blockquote { border-left-color: #4b5563; color: #9ca3af; }

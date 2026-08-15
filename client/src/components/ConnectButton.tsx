@@ -11,7 +11,7 @@ interface ConnectionStatus {
 export default function ConnectButton({ username }: { username: string }) {
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["connection-status", username],
     queryFn: async () => (await api.get<{ data: ConnectionStatus }>(`/api/connections/status/${username}`)).data.data,
   });
@@ -29,6 +29,25 @@ export default function ConnectButton({ username }: { username: string }) {
     onSuccess: invalidate,
   });
 
+  // Loading: render nothing — a brief flash before the button appears is
+  // normal UX. Errored: DON'T render nothing — that's what was making a
+  // failed request (expired token, transient 401/500, etc.) indistinguishable
+  // from "this is your own profile." Surface it instead, with a retry.
+  if (isLoading) return null;
+
+  if (isError) {
+    const status = (error as any)?.response?.status;
+    return (
+      <button
+        onClick={() => refetch()}
+        title={(error as any)?.response?.data?.message || (error as any)?.message}
+        className="text-sm text-red-500 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-md px-3 py-1.5 hover:bg-red-50 dark:hover:bg-red-900/30"
+      >
+        Couldn't load status{status ? ` (${status})` : ""} — retry
+      </button>
+    );
+  }
+
   if (!data || data.status === "SELF") return null;
 
   if (data.status === "NONE") {
@@ -36,7 +55,7 @@ export default function ConnectButton({ username }: { username: string }) {
       <button
         onClick={() => sendRequest.mutate()}
         disabled={sendRequest.isPending}
-        className="text-sm border border-brand-600 text-brand-600 hover:bg-brand-50 rounded-md px-3 py-1.5 disabled:opacity-50"
+        className="text-sm border border-brand-600 dark:border-brand-400 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/40 rounded-md px-3 py-1.5 disabled:opacity-50"
       >
         {sendRequest.isPending ? "Sending..." : "+ Connect"}
       </button>
@@ -44,7 +63,7 @@ export default function ConnectButton({ username }: { username: string }) {
   }
 
   if (data.status === "PENDING_SENT") {
-    return <span className="text-sm text-gray-400 border border-gray-200 rounded-md px-3 py-1.5">Request sent</span>;
+    return <span className="text-sm text-gray-400 dark:text-gray-500 border border-gray-200 dark:border-gray-700 rounded-md px-3 py-1.5">Request sent</span>;
   }
 
   if (data.status === "PENDING_RECEIVED") {
@@ -58,7 +77,7 @@ export default function ConnectButton({ username }: { username: string }) {
         </button>
         <button
           onClick={() => respond.mutate("REJECT")}
-          className="border border-gray-300 hover:bg-gray-50 rounded-md px-3 py-1.5"
+          className="border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md px-3 py-1.5"
         >
           Reject
         </button>
@@ -66,5 +85,5 @@ export default function ConnectButton({ username }: { username: string }) {
     );
   }
 
-  return <span className="text-sm text-brand-600 border border-brand-100 bg-brand-50 rounded-md px-3 py-1.5">✓ Connected</span>;
+  return <span className="text-sm text-brand-600 dark:text-brand-400 border border-brand-100 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/30 rounded-md px-3 py-1.5">✓ Connected</span>;
 }

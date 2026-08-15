@@ -31,18 +31,9 @@ shared/   TypeScript types shared by both
 - **Day 7** — Blog system: list view (`/blog`), single post view with Markdown rendering (`/blog/:slug`), and a create/edit page (`/blog/new`, `/blog/:slug/edit`) with a live Markdown preview toggle. Backend blog routes wired in; owner-only edit/delete.
 - **Day 8** — Developer search & discovery (`/search`): filter by skill and/or location, paginated results as developer cards linking to their profile.
 - **Day 9** — Connection system: send/accept/reject requests, `/connections` page (pending + accepted lists), a `ConnectButton` on profiles that reflects live status (none/pending sent/pending received/connected), and a mutual-connections indicator on other users' profiles.
+- **Day 10** — Skill endorsements: connected developers can endorse each other's skills (backend already enforced this via the `ACCEPTED` connection check — wired in today), skills now come back sorted by endorsement count with an `endorsedByMe` flag, `SkillsGrid` shows a 🏆 badge on the top skill and inline endorse buttons for connected viewers.
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
 
 To seed sample data after migrating: `npm run prisma:seed --workspace=server`
-
-## Day 9 � Connection System
-
-- Send connection requests
-- Accept or reject connection requests
-- Cancel pending requests
-- Connections list
-- Pending incoming/outgoing requests
-- Connection status on developer profiles
-- Mutual connections

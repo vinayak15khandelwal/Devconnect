@@ -11,6 +11,7 @@ import projectRoutes from "./routes/project.routes";
 import blogRoutes from "./routes/blog.routes";
 import searchRoutes from "./routes/search.routes";
 import connectionRoutes from "./routes/connection.routes";
+import endorsementRoutes from "./routes/endorsement.routes";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/blog", blogRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/connections", connectionRoutes);
+app.use("/api/endorsements", endorsementRoutes);
 
 app.use(errorHandler);
 
