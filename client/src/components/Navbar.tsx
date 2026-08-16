@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import NotificationBell from "./NotificationBell";
 
 const LINKS = [
   { to: "/dashboard", label: "Home" },
@@ -61,6 +62,7 @@ export default function Navbar() {
             </Link>
           )}
           <ThemeToggle />
+          {user && <NotificationBell />}
           {user && (
             <button
               onClick={logout}

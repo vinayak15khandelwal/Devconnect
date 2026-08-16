@@ -32,6 +32,8 @@ shared/   TypeScript types shared by both
 - **Day 8** — Developer search & discovery (`/search`): filter by skill and/or location, paginated results as developer cards linking to their profile.
 - **Day 9** — Connection system: send/accept/reject requests, `/connections` page (pending + accepted lists), a `ConnectButton` on profiles that reflects live status (none/pending sent/pending received/connected), and a mutual-connections indicator on other users' profiles.
 - **Day 10** — Skill endorsements: connected developers can endorse each other's skills (backend already enforced this via the `ACCEPTED` connection check — wired in today), skills now come back sorted by endorsement count with an `endorsedByMe` flag, `SkillsGrid` shows a 🏆 badge on the top skill and inline endorse buttons for connected viewers.
+- **Day 10 UX** — Dark/light mode (persisted, OS-preference fallback), password show/hide on Login+Register, and a single reusable `Navbar` (Home/Discover/Connections/Blog/My profile/Logout/theme toggle) wired into every authenticated page.
+- **Day 11** — Real-time notifications: server now runs on a raw `http.Server` with Socket.io attached (`initSocket`), JWT-authenticated per socket, pushes live events for connection requests/accepts and endorsements. `GET /api/notifications` now resolves the actor's name/avatar for display. `NotificationBell` in the navbar shows an unread-count badge and a dropdown, updating live via the socket and on click-to-mark-read.
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.

@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import NotificationBell from "./NotificationBell";
 const LINKS = [
     { to: "/dashboard", label: "Home" },
     { to: "/search", label: "Discover" },
@@ -23,5 +24,5 @@ export default function Navbar() {
                                 : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"), children: link.label }, link.to))) })), _jsxs("div", { className: "flex items-center gap-3 shrink-0", children: [user && (_jsx(Link, { to: `/u/${user.username}`, className: "text-sm px-3 py-1.5 rounded-md transition " +
                                 (isActive(`/u/${user.username}`)
                                     ? "bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-400 font-medium"
-                                    : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"), children: "My profile" })), _jsx(ThemeToggle, {}), user && (_jsx("button", { onClick: logout, className: "text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200", children: "Log out" }))] })] }) }));
+                                    : "text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"), children: "My profile" })), _jsx(ThemeToggle, {}), user && _jsx(NotificationBell, {}), user && (_jsx("button", { onClick: logout, className: "text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200", children: "Log out" }))] })] }) }));
 }

@@ -2,9 +2,11 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { createServer } from "http";
 import { prisma } from "./lib/prisma";
 import { responseFormatter } from "./middleware/response";
 import { errorHandler } from "./middleware/errorHandler";
+import { initSocket } from "./socket";
 import authRoutes from "./routes/auth.routes";
 import profileRoutes from "./routes/profile.routes";
 import projectRoutes from "./routes/project.routes";
@@ -12,8 +14,10 @@ import blogRoutes from "./routes/blog.routes";
 import searchRoutes from "./routes/search.routes";
 import connectionRoutes from "./routes/connection.routes";
 import endorsementRoutes from "./routes/endorsement.routes";
+import notificationRoutes from "./routes/notification.routes";
 
 const app = express();
+const httpServer = createServer(app);
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
@@ -36,10 +40,13 @@ app.use("/api/blog", blogRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/connections", connectionRoutes);
 app.use("/api/endorsements", endorsementRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(errorHandler);
 
+initSocket(httpServer);
+
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`DevConnect API listening on http://localhost:${PORT}`);
 });
