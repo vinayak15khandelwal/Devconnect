@@ -54,15 +54,15 @@ export default function Connections() {
           <div className="space-y-3">
             {pending?.map((c) => (
               <div key={c.id} className="flex items-center justify-between">
-                <Link to={`/u/${c.requester.username}`} className="flex items-center gap-3">
+                <Link to={`/u/${c.requester.username}`} className="flex items-center gap-3 min-w-0 flex-1">
                   <img
                     src={c.requester.avatarUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${c.requester.name}`}
                     alt={c.requester.name}
                     className="w-9 h-9 rounded-full object-cover bg-gray-100 dark:bg-gray-700"
                   />
-                  <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{c.requester.name}</span>
+                  <span className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{c.requester.name}</span>
                 </Link>
-                <div className="flex gap-2 text-sm">
+                <div className="flex gap-2 text-sm shrink-0">
                   <button
                     onClick={() => respond.mutate({ id: c.id, action: "ACCEPT" })}
                     className="bg-brand-600 hover:bg-brand-700 text-white rounded-md px-3 py-1.5"
@@ -93,17 +93,17 @@ export default function Connections() {
               const other = c.requester.id === currentUser?.id ? c.addressee! : c.requester;
               return (
                 <div key={c.id} className="flex items-center justify-between">
-                  <Link to={`/u/${other.username}`} className="flex items-center gap-3">
+                  <Link to={`/u/${other.username}`} className="flex items-center gap-3 min-w-0 flex-1">
                     <img
                       src={other.avatarUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${other.name}`}
                       alt={other.name}
                       className="w-9 h-9 rounded-full object-cover bg-gray-100 dark:bg-gray-700"
                     />
-                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100">{other.name}</span>
+                    <span className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{other.name}</span>
                   </Link>
                   <button
                     onClick={() => remove.mutate(c.id)}
-                    className="text-sm text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"
+                    className="text-sm text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 shrink-0 px-2 py-1"
                   >
                     Remove
                   </button>

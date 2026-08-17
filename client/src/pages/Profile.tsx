@@ -120,15 +120,15 @@ export default function Profile() {
         )}
 
         {/* Hero */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 flex items-start gap-5">
-          <div className="relative">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+          <div className="relative shrink-0">
             <img
               src={profile.avatarUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${profile.name}`}
               alt={profile.name}
               className="w-20 h-20 rounded-full object-cover bg-gray-100 dark:bg-gray-700"
             />
             {isOwnProfile && (
-              <label className="absolute -bottom-1 -right-1 bg-brand-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">
+              <label className="absolute -bottom-1 -right-1 bg-brand-600 text-white text-xs rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
                 +
                 <input
                   type="file" accept="image/*" className="hidden"
@@ -138,8 +138,8 @@ export default function Profile() {
             )}
           </div>
 
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
+          <div className="flex-1 w-full">
+            <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-3">
               <div>
                 <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">{profile.name}</h1>
                 <p className="text-sm text-gray-400 dark:text-gray-500">@{profile.username}</p>
@@ -147,7 +147,7 @@ export default function Profile() {
               {isOwnProfile ? (
                 <button
                   onClick={() => setEditing((v) => !v)}
-                  className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 sm:py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   {editing ? "Cancel" : "Edit profile"}
                 </button>
@@ -159,7 +159,7 @@ export default function Profile() {
             {!editing ? (
               <>
                 {profile.bio && <p className="text-gray-600 dark:text-gray-300 mt-2">{profile.bio}</p>}
-                <div className="flex gap-4 mt-2 text-sm text-gray-400 dark:text-gray-500">
+                <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-2 text-sm text-gray-400 dark:text-gray-500">
                   {profile.location && <span>📍 {profile.location}</span>}
                   {profile.githubUrl && (
                     <a href={profile.githubUrl} target="_blank" rel="noreferrer" className="text-brand-600 dark:text-brand-400 hover:underline">

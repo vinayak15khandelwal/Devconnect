@@ -50,7 +50,7 @@ export default function SkillsGrid({
               onClick={() => endorse.mutate(skill.name)}
               disabled={endorse.isPending}
               title="Endorse this skill"
-              className="text-brand-500 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 disabled:opacity-50 font-bold"
+              className="text-brand-500 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 disabled:opacity-50 font-bold px-1.5 py-1 -my-1 -mr-1"
             >
               +
             </button>
