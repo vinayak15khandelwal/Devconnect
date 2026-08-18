@@ -15,6 +15,7 @@ import searchRoutes from "./routes/search.routes";
 import connectionRoutes from "./routes/connection.routes";
 import endorsementRoutes from "./routes/endorsement.routes";
 import notificationRoutes from "./routes/notification.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
 
 const app = express();
 const httpServer = createServer(app);
@@ -41,6 +42,7 @@ app.use("/api/search", searchRoutes);
 app.use("/api/connections", connectionRoutes);
 app.use("/api/endorsements", endorsementRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.use(errorHandler);
 
