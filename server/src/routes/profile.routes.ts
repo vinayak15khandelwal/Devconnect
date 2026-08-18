@@ -1,5 +1,5 @@
 import { Router } from "express";
-import multer from "multer";
+import { imageUpload as upload } from "../lib/upload";
 import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { requireAuth, attachUserIfPresent, AuthedRequest } from "../middleware/auth";
@@ -7,7 +7,6 @@ import { uploadImageBuffer } from "../lib/cloudinary";
 import { toPublicUser } from "./auth.routes";
 
 const router = Router();
-const upload = multer({ limits: { fileSize: 2 * 1024 * 1024 } }); // 2MB max per brief
 
 router.get("/:username", attachUserIfPresent, async (req: AuthedRequest, res) => {
   const user = await prisma.user.findUnique({

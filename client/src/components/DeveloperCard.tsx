@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
 interface DeveloperSummary {
   id: string;
@@ -10,7 +11,7 @@ interface DeveloperSummary {
   skills: string[];
 }
 
-export default function DeveloperCard({ dev }: { dev: DeveloperSummary }) {
+function DeveloperCard({ dev }: { dev: DeveloperSummary }) {
   return (
     <Link
       to={`/u/${dev.username}`}
@@ -46,3 +47,5 @@ export default function DeveloperCard({ dev }: { dev: DeveloperSummary }) {
     </Link>
   );
 }
+
+export default memo(DeveloperCard);

@@ -1,6 +1,7 @@
+import { memo } from "react";
 import type { Project } from "@shared/index";
 
-export default function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-800 hover:shadow-sm transition">
       {project.imageUrl && (
@@ -34,3 +35,5 @@ export default function ProjectCard({ project }: { project: Project }) {
     </div>
   );
 }
+
+export default memo(ProjectCard);

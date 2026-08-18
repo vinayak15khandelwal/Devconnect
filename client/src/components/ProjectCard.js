@@ -1,4 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export default function ProjectCard({ project }) {
+import { memo } from "react";
+function ProjectCard({ project }) {
     return (_jsxs("div", { className: "border border-gray-100 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-800 hover:shadow-sm transition", children: [project.imageUrl && (_jsx("img", { src: project.imageUrl, alt: project.title, className: "w-full h-36 object-cover" })), _jsxs("div", { className: "p-4", children: [_jsx("h3", { className: "font-semibold text-gray-900 dark:text-gray-100", children: project.title }), _jsx("p", { className: "text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2", children: project.description }), _jsx("div", { className: "flex flex-wrap gap-1.5 mt-3", children: project.techStack.map((tech) => (_jsx("span", { className: "text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md", children: tech }, tech))) }), _jsxs("div", { className: "flex gap-3 mt-3 text-sm", children: [project.repoUrl && (_jsx("a", { href: project.repoUrl, target: "_blank", rel: "noreferrer", className: "text-brand-600 dark:text-brand-400 hover:underline", children: "Repo" })), project.liveUrl && (_jsx("a", { href: project.liveUrl, target: "_blank", rel: "noreferrer", className: "text-brand-600 dark:text-brand-400 hover:underline", children: "Live" }))] })] })] }));
 }
+export default memo(ProjectCard);

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../lib/prisma";
 import { signToken } from "../lib/jwt";
 import { requireAuth, AuthedRequest } from "../middleware/auth";
+import { authRateLimit } from "../middleware/rateLimit";
 
 const router = Router();
 
@@ -14,7 +15,7 @@ const registerSchema = z.object({
   password: z.string().min(6),
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", authRateLimit, async (req, res) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) return res.fail(parsed.error.errors[0].message, 422);
   const { name, username, email, password } = parsed.data;
@@ -37,7 +38,7 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", authRateLimit, async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) return res.fail("Invalid email or password", 422);
   const { email, password } = parsed.data;
