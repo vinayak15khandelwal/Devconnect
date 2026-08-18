@@ -40,8 +40,24 @@ shared/   TypeScript types shared by both
   - **Testing**: 13 backend Jest tests (JWT sign/verify, `responseFormatter`, `requireAuth` — all four token-source branches) and 9 frontend Vitest+RTL tests (`PasswordInput` visibility toggle, `SkillsGrid` empty state / rendering / endorse-control visibility logic). All actually executed and passing, not just typechecked.
   - **Performance**: route-level code splitting via `React.lazy`/`Suspense` — Login now ships a 2.84KB chunk instead of the full ~460KB bundle; `React.memo` on `ProjectCard`/`DeveloperCard` (pure list items re-rendered in grids).
   - **Security**: found and fixed a real gap — avatar/project image uploads had a size cap but no `fileFilter`, so any file type could be uploaded as an "image." Added `helmet`, rate-limiting on `/register` and `/login` (20 attempts/15min/IP), and a startup warning if `JWT_SECRET` is unset in production. Reviewed and confirmed already-safe: Prisma parameterizes all queries (no injection surface), `react-markdown` doesn't render raw HTML (no stored XSS via blog posts), bcrypt at 10 rounds, CORS restricted to `CLIENT_URL`.
+- **Day 15** — Final: deployment, documentation, demo prep.
+  - `docs/api-reference.md` — every endpoint, method, auth requirement, and payload shape
+  - `docs/user-flows.md` — Mermaid diagram, registration → profile → connect → endorse
+  - `docs/deployment-guide.md` — exact Vercel/Railway/Neon steps and env vars (not run — this sandbox can't reach those services or hold real credentials; written so you can follow it directly)
+  - `docs/e2e-test-checklist.md` — consolidated manual test plan across all 15 days, two-account scenarios for connections/endorsements/notifications
+  - `docs/demo-script.md` — 7-minute demo script with timings and anticipated Q&A
+  - `server/README.md`, `client/README.md`, `shared/README.md` — per-package docs
+  - Final full-repo verification: 22/22 tests passing (13 backend + 9 frontend), `tsc --noEmit` clean on both packages, `vite build` succeeds (349 modules, confirmed code-split)
 
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
 
 To seed sample data after migrating: `npm run prisma:seed --workspace=server`
+
+## Documentation
+- [`docs/api-reference.md`](docs/api-reference.md) — every endpoint
+- [`docs/database-schema.md`](docs/database-schema.md) — ERD + design notes
+- [`docs/user-flows.md`](docs/user-flows.md) — core journey diagram
+- [`docs/deployment-guide.md`](docs/deployment-guide.md) — Vercel/Railway/Neon setup
+- [`docs/e2e-test-checklist.md`](docs/e2e-test-checklist.md) — manual test plan
+- [`docs/demo-script.md`](docs/demo-script.md) — 7-minute demo script
