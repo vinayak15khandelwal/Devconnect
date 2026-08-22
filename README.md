@@ -49,6 +49,22 @@ shared/   TypeScript types shared by both
   - `server/README.md`, `client/README.md`, `shared/README.md` — per-package docs
   - Final full-repo verification: 22/22 tests passing (13 backend + 9 frontend), `tsc --noEmit` clean on both packages, `vite build` succeeds (349 modules, confirmed code-split)
 
+## Production Deployment
+
+Frontend: https://devconnect-client-kappa.vercel.app
+
+Backend API: https://devconnect-production-acc7.up.railway.app
+
+Database: Neon PostgreSQL
+
+Backend hosting: Railway
+
+Frontend hosting: Vercel
+
+Image storage: Cloudinary
+
+Real-time: Socket.io
+
 ## Schema
 See [`docs/database-schema.md`](docs/database-schema.md) for the full ERD and design notes.
 
