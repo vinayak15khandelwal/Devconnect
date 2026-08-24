@@ -51,7 +51,13 @@ shared/   TypeScript types shared by both
 
 ## Production Deployment
 
-F
+Frontend: https://devconnect-client-kappa.vercel.app
+
+Backend API: https://devconnect-production-acc7.up.railway.app
+
+Database: Neon PostgreSQL
+
+Backend hosting: Railway
 
 Frontend hosting: Vercel
 
