@@ -10,7 +10,12 @@ client/   React + Vite frontend
 server/   Express + TypeScript API
 shared/   TypeScript types shared by both
 ```
-lient/.env`
+
+## Local setup
+1. `npm install` (installs all three workspaces)
+2. Copy env files:
+   - `cp server/.env.example server/.env` → fill in `DATABASE_URL` (a free [Neon](https://neon.tech) Postgres URL works great), `JWT_SECRET`
+   - `cp client/.env.example client/.env`
 3. Push the Prisma schema to your database: `npm run prisma:migrate --workspace=server`
 4. Run the API: `npm run dev:server` → http://localhost:4000/health
 5. Run the client: `npm run dev:client` → http://localhost:5173
